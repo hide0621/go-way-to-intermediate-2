@@ -1,51 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"io"
 	"log"
 	"net/http"
+
+	"github.com/hide0621/go-way-to-intermediate-2/handlers"
 )
 
 func main() {
 
-	hellHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Hello, World!\n")
-	}
+	http.HandleFunc("/hello", handlers.HelloHandler)
 
-	postArticleHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Posting Article...\n")
-	}
+	http.HandleFunc("/article", handlers.PostArticleHandler)
 
-	articleListHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Article List\n")
-	}
+	http.HandleFunc("/article/list", handlers.ArticleListHandler)
 
-	articleDetailHandler := func(w http.ResponseWriter, req *http.Request) {
-		articleID := 1
-		resString := fmt.Sprintf("Article No:%d\n", articleID)
-		io.WriteString(w, resString)
-	}
+	http.HandleFunc("/article/1", handlers.ArticleDetailHandler)
 
-	postNiceHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Posting Nice...\n")
-	}
+	http.HandleFunc("/article/nice", handlers.PostNiceHandler)
 
-	postCommentHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Posting Comment...\n")
-	}
-
-	http.HandleFunc("/hello", hellHandler)
-
-	http.HandleFunc("/article", postArticleHandler)
-
-	http.HandleFunc("/article/list", articleListHandler)
-
-	http.HandleFunc("/article/1", articleDetailHandler)
-
-	http.HandleFunc("/article/nice", postNiceHandler)
-
-	http.HandleFunc("/comment", postCommentHandler)
+	http.HandleFunc("/comment", handlers.PostCommentHandler)
 
 	log.Println("server start at port 8080")
 
