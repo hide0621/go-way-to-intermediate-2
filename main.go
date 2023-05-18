@@ -4,25 +4,28 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/hide0621/go-way-to-intermediate-2/handlers"
 )
 
 func main() {
 
-	http.HandleFunc("/hello", handlers.HelloHandler)
+	r := mux.NewRouter()
 
-	http.HandleFunc("/article", handlers.PostArticleHandler)
+	r.HandleFunc("/hello", handlers.HelloHandler).Methods(http.MethodGet)
 
-	http.HandleFunc("/article/list", handlers.ArticleListHandler)
+	r.HandleFunc("/article", handlers.PostArticleHandler).Methods(http.MethodPost)
 
-	http.HandleFunc("/article/1", handlers.ArticleDetailHandler)
+	r.HandleFunc("/article/list", handlers.ArticleListHandler).Methods(http.MethodGet)
 
-	http.HandleFunc("/article/nice", handlers.PostNiceHandler)
+	r.HandleFunc("/article/1", handlers.ArticleDetailHandler).Methods(http.MethodGet)
 
-	http.HandleFunc("/comment", handlers.PostCommentHandler)
+	r.HandleFunc("/article/nice", handlers.PostNiceHandler).Methods(http.MethodPost)
+
+	r.HandleFunc("/comment", handlers.PostCommentHandler).Methods(http.MethodPost)
 
 	log.Println("server start at port 8080")
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 
 }
